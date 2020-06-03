@@ -43,6 +43,7 @@ class Logora_Debate {
      * Initialize the class and set its properties.
      *
      * @since    1.0
+     * @access   public
      * @param    string $logora       The name of this plugin.
      * @param    string $version      The version of this plugin.
      */
@@ -55,9 +56,9 @@ class Logora_Debate {
      *
      * Loads Logora Debate Module page template
      * 
-     * @since 1.0
-     *
-     * @return object Template
+     * @since      1.0
+     * @access     public
+     * @return     object Template
      */
     public static function load_template( $template ) {
         if ( is_page( 'logora-app-page' ) ) {
@@ -71,9 +72,9 @@ class Logora_Debate {
      *
      * Hide admin bar on Logora Debate page
      * 
-     * @since 1.0
-     *
-     * @return boolean    false if page is the Logora Debate page
+     * @since     1.0
+     * @access    public
+     * @return    boolean    false if page is the Logora Debate page, true otherwise
      */
     public function show_admin_bar() {
         if ( is_page( 'logora-app-page' ) ) {
@@ -99,6 +100,13 @@ class Logora_Debate {
         }
     }
     
+    /**
+     * Removes all scripts on the Logora Debate page.
+     *
+     * @since      1.0
+     * @access     public
+     * @return     None
+     */
     public function dequeue_all_scripts(){
         if ( is_page( 'logora-app-page' ) ) {
             global $wp_scripts;
@@ -109,6 +117,13 @@ class Logora_Debate {
         }
     }
     
+    /**
+     * Removes all stylesheets on the Logora Debate page.
+     *
+     * @since     1.0
+     * @access    public
+     * @return    None
+     */
     public function dequeue_all_styles(){
         if ( is_page( 'logora-app-page' ) ) {
             global $wp_styles;
@@ -119,9 +134,9 @@ class Logora_Debate {
     /**
      * Adds rewriting rules for the Logora Debate Module
      *
-     * @since 1.0.0
-     *
-     * @return None
+     * @since   1.0
+     * @access  public
+     * @return  None
      */
     public function add_rewrite_rules()
     {

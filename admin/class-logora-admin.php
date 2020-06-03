@@ -49,8 +49,8 @@ class Logora_Admin {
     /**
 	 * Initialize settings by registering settings and settings form.
 	 *
-	 * @since     1.0.0
-	 *
+	 * @since     1.0
+	 * @access    public
 	 * @return    null
 	 */
     public function settings_init() {        
@@ -108,10 +108,24 @@ class Logora_Admin {
         );
     }
     
-    public function logora_section_main_cb( $arg ) {
+    /**
+	 * Callback function to print content at the top of the settings section.
+	 *
+	 * @since     1.0
+	 * @access    public
+	 * @return    None
+	 */
+    public function logora_section_main_cb( $args ) {
         echo "<span>Pour finaliser l'installation de Logora, rentrez votre nom d'application et votre clé secrète, disponibles dans <a href='https://admin.logora.fr' target='_blank'>votre espace d'administration</a>.</span><br>";
     }
     
+    /**
+	 * Callback function to print an input field.
+	 *
+	 * @since     1.0
+	 * @access    public
+	 * @return    None
+	 */
     public function logora_input_field_cb( $args ) {
         $option_name   = $args['option_name'];
         $id     = $args['label_for'];
@@ -129,7 +143,9 @@ class Logora_Admin {
 	/**
 	 * Register the administration menu for this plugin into the WordPress Dashboard menu.
 	 *
-	 * @since    1.0.0
+	 * @since    1.0
+     * @access   public
+     * @return   None
 	 */
 	public function add_plugin_admin_menu() {
 		/*
@@ -147,7 +163,8 @@ class Logora_Admin {
 	/**
 	 * Render the settings page for this plugin.
 	 *
-	 * @since    1.0.0
+	 * @since    1.0
+     * @access   public
 	 */
 	public function display_plugin_admin_page() {
         if ( ! current_user_can( 'manage_options' ) ) {

@@ -10,7 +10,7 @@
  */
 
 /**
- * The service for making requests to the Logora API
+ * Utility functions for Single Sign-On.
  *
  * @package    Logora
  * @subpackage Logora/includes
@@ -18,6 +18,13 @@
  */
 class Logora_Utils {
     
+    /**
+	 * Returns current user as an object.
+	 *
+	 * @since     1.0
+	 * @access    public
+	 * @return    array     Current user
+	 */
     public function get_user_object() {
         $current_user = wp_get_current_user();
         $first_name = $current_user->user_firstname;
@@ -36,6 +43,13 @@ class Logora_Utils {
         );
     }
     
+    /**
+	 * Returns the Single Sign-On message for current user.
+	 *
+	 * @since     1.0
+	 * @access    public
+	 * @return    string      Message composed of the user payload, current timestamp, and signature.
+	 */
     public function get_sso_auth() {
         if(!is_user_logged_in()) {
             return "";

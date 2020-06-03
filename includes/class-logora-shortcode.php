@@ -53,17 +53,34 @@ class Logora_Shortcode {
      * Register shortcode.
      *
      * @since    1.0
+     * @access   public
      */
     public function register_shortcode() {
         add_shortcode( 'logora-synthese', array($this, 'shortcode') );
     }
     
+    
+    /**
+     * Create configuration script to be inserted with the Logora Shortcode.
+     * 
+     * @since    1.0
+     * @access   public
+     * @return   string   A string containing the configuration object as javascript object.
+     */
     public function logora_config_script($object_name, $object) {
         return '<script>
                 var '. $object_name .' = '. json_encode($object) .';
             </script>';
     }
     
+    
+    /**
+     * Generates the code embedded by the Logora shortcode.
+     *
+     * @since    1.0
+     * @access   public
+     * @return   string    The code embedded by the Logora Shortcode.
+     */
 	public function shortcode( $atts ) {
         global $post;
         
@@ -109,8 +126,7 @@ class Logora_Shortcode {
             'remote_auth' => $remote_auth,
             'provider' => array('url' => get_site_url(), 'name' => get_bloginfo('name')),
             'auth' => array('login_url' => wp_http_validate_url(wp_login_url()),
-                            'registration_url' => wp_http_validate_url(wp_registration_url())),
-            'hasVote' => true
+                            'registration_url' => wp_http_validate_url(wp_registration_url()))
 		);
         
         $api_shortcode_url = getenv("LOGORA_MODE") === 'staging' ? 'https://d2d2dbh4kbp3fl.cloudfront.net/synthese.js' : 'https://api.logora.fr/synthese.js';

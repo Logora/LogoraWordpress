@@ -70,7 +70,6 @@ class Logora_Metabox {
 				add_meta_box( 'logora-metabox', __('Logora','logora'), array( __CLASS__, 'meta_box' ), $ptype, 'side' );
             }
 		}
-        add_action( 'save_pôst', array($this, 'save_post'), 10, 3 );
 	}
 
     /**
