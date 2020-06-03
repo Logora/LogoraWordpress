@@ -37,15 +37,6 @@ class Logora_Metabox {
      * @var      string $version    The current version of this plugin.
      */
     private $version;
-
-    /**
-     * The unique Logora website shortname.
-     *
-     * @since    1.0
-     * @access   private
-     * @var      string $shortname    The unique Logora website shortname.
-     */
-    private $shortname;
     
     /**
      * Initialize the class and set its properties.
@@ -53,12 +44,10 @@ class Logora_Metabox {
      * @since    1.0
      * @param    string $logora       The name of this plugin.
      * @param    string $version      The version of this plugin.
-     * @param    string $shortname    The configured Logora shortname.
      */
-    public function __construct( $logora, $version, $shortname ) {
+    public function __construct( $logora, $version ) {
         $this->logora = $logora;
         $this->version = $version;
-        $this->shortname = $shortname;
     }
     
     /**

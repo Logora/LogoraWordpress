@@ -30,6 +30,9 @@ class Logora_Deactivator {
 	 */
 	public static function deactivate() {
 		// TODO
+        // DELETE logora-app-page
+        
+        flush_rewrite_rules();
 	}
 
 }

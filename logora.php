@@ -15,7 +15,7 @@
  * @wordpress-plugin
  * Plugin Name:       Logora
  * Plugin URI:        https://logora.fr
- * Description:       Logora helps publishers an engaged debate community.
+ * Description:       Logora helps publishers create an engaged debate community.
  * Version:           1.0
  * Author:            Logora
  * Author URI:        https://logora.fr

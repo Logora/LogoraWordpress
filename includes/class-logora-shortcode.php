@@ -36,15 +36,6 @@ class Logora_Shortcode {
      * @var      string $version    The current version of this plugin.
      */
     private $version;
-
-    /**
-     * The unique Logora website shortname.
-     *
-     * @since    1.0
-     * @access   private
-     * @var      string $shortname    The unique Logora website shortname.
-     */
-    private $shortname;
     
     /**
      * Initialize the class and set its properties.
@@ -52,15 +43,19 @@ class Logora_Shortcode {
      * @since    1.0
      * @param    string $logora       The name of this plugin.
      * @param    string $version      The version of this plugin.
-     * @param    string $shortname    The configured Logora shortname.
      */
-    public function __construct( $logora, $version, $shortname ) {
-
+    public function __construct( $logora, $version ) {
         $this->logora = $logora;
         $this->version = $version;
-        $this->shortname = $shortname;
-        
-		add_shortcode( 'logora-synthese', array( $this, 'shortcode' ) );
+    }
+    
+    /**
+     * Register shortcode.
+     *
+     * @since    1.0
+     */
+    public function register_shortcode() {
+        add_shortcode( 'logora-synthese', array($this, 'shortcode') );
     }
     
     public function logora_config_script($object_name, $object) {
@@ -72,8 +67,8 @@ class Logora_Shortcode {
 	public function shortcode( $atts ) {
         global $post;
         
-        $logora_api = Logora_API::get_instance();
-        $remote_auth = $logora_api->get_sso_auth();
+        $logora_utils = new Logora_Utils();
+        $remote_auth = $logora_utils->get_sso_auth();
         
 		$object_name = 'logora_object_' . uniqid();
 

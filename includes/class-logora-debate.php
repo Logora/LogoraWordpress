@@ -38,15 +38,6 @@ class Logora_Debate {
      * @var      string $version    The current version of this plugin.
      */
     private $version;
-
-    /**
-     * The unique Logora website shortname.
-     *
-     * @since    1.0
-     * @access   private
-     * @var      string $shortname    The unique Logora website shortname.
-     */
-    private $shortname;
     
     /**
      * Initialize the class and set its properties.
@@ -54,12 +45,10 @@ class Logora_Debate {
      * @since    1.0
      * @param    string $logora       The name of this plugin.
      * @param    string $version      The version of this plugin.
-     * @param    string $shortname    The configured Logora shortname.
      */
-    public function __construct( $logora, $version, $shortname ) {
+    public function __construct( $logora, $version ) {
         $this->logora = $logora;
         $this->version = $version;
-        $this->shortname = $shortname;
     }
 
     /**
@@ -71,15 +60,23 @@ class Logora_Debate {
      * @return object Template
      */
     public static function load_template( $template ) {
-        if ( is_page( LOGORA_APP_PAGE_SLUG ) ) {
+        if ( is_page( 'logora-app-page' ) ) {
             $page_template = dirname( __FILE__ ) . '/page-logora-app-page.php';
             return $page_template;
         }
         return $template;
     }
     
+    /**
+     *
+     * Hide admin bar on Logora Debate page
+     * 
+     * @since 1.0
+     *
+     * @return boolean    false if page is the Logora Debate page
+     */
     public function show_admin_bar() {
-        if ( is_page( LOGORA_APP_PAGE_SLUG ) ) {
+        if ( is_page( 'logora-app-page' ) ) {
             return false;
         }
         return true;
@@ -103,7 +100,7 @@ class Logora_Debate {
     }
     
     public function dequeue_all_scripts(){
-        if ( is_page( LOGORA_APP_PAGE_SLUG ) ) {
+        if ( is_page( 'logora-app-page' ) ) {
             global $wp_scripts;
             $scripts = $wp_scripts->registered;
             foreach ( $scripts as $script ){
@@ -113,36 +110,50 @@ class Logora_Debate {
     }
     
     public function dequeue_all_styles(){
-        if ( is_page( LOGORA_APP_PAGE_SLUG ) ) {
+        if ( is_page( 'logora-app-page' ) ) {
             global $wp_styles;
             $wp_styles->queue = array();
         }    
     }
     
-    public function get_user_object() {
-        $current_user = wp_get_current_user();
-        $first_name = $current_user->user_firstname;
-        $last_name = $current_user->user_lastname;
-        $user_name = $current_user->user_login;
-        $user_image = get_avatar_url($current_user->ID, ['size' => '200']);
-        if(empty($first_name) && empty($last_name) && !empty($user_name)) {
-            $first_name = $user_name;
+    /**
+     * Adds rewriting rules for the Logora Debate Module
+     *
+     * @since 1.0.0
+     *
+     * @return None
+     */
+    public function add_rewrite_rules()
+    {
+        $prefix_path = get_option('logora_prefix_path', "");
+        if(!empty($prefix_path)) {
+            add_rewrite_rule(
+                '^'. $prefix_path .'[\S]*$',
+                'index.php?pagename=logora-app-page',
+                'top'
+            );
+        } else {
+            add_rewrite_rule(
+                '^debat/[a-zA-Z0-9-]{0,100}$',
+                'index.php?pagename=logora-app-page',
+                'top'
+            );
+            add_rewrite_rule(
+                '^user/[a-zA-Z0-9-]{0,100}$',
+                'index.php?pagename=logora-app-page',
+                'top'
+            );
+            add_rewrite_rule(
+                '^search/?$',
+                'index.php?pagename=logora-app-page',
+                'top'
+            );
+            add_rewrite_rule(
+                '^debats/?$',
+                'index.php?pagename=logora-app-page',
+                'top'
+            );
         }
-        return array(
-            "uid" => $current_user->ID,
-            "first_name" => $first_name,
-            "last_name" => $last_name,
-            "email" => $current_user->user_email,
-            "image_url" => $user_image
-        );
-    }
-    
-    public function get_sso_auth($secret) {
-        $data = self::get_user_object();
-        $message = base64_encode(json_encode($data));
-        $timestamp = time();
-        $hmac = hash_hmac( 'sha1', $message . ' ' . $timestamp, $secret );
-        return $message . ' ' . $hmac . ' ' . $timestamp;
     }
     
     /**
@@ -154,17 +165,17 @@ class Logora_Debate {
 	 */
 	public static function embed_vars() {        
 		$embed_vars = array(
-            'shortname' => $this->shortname,
+            'shortname' => get_option('logora_shortname', ''),
             'login_url' => get_option('logora_login_url', wp_login_url()),
             'registration_url' => get_option('logora_registration_url', wp_registration_url()),
             'provider' => array('name' => get_bloginfo('name'), 'url' => get_site_url()),
-            'ga_tracking_id' => get_option('logora_ga_tracking_id');,
+            'ga_tracking_id' => get_option('logora_ga_tracking_id'),
             'hideHeaders' => false,
 		);
         
         if(is_user_logged_in()) {
-            $api_secret = get_option('logora_secret_key');
-            $remote_auth = self::get_sso_auth($api_secret);
+            $logora_utils = new Logora_Utils();
+            $remote_auth = $logora_utils->get_sso_auth();
             $embed_vars['remote_auth'] = $remote_auth;
         }
         

@@ -27,16 +27,6 @@
  * @author     Henry Boisgibault <henry@logora.fr>
  */
 class Logora {
-
-    /**
-     * Instance of the Logora API service.
-     *
-     * @since    1.0
-     * @access   private
-     * @var      Logora_Api_Service    $api_service    Instance of the Logora API service.
-     */
-    private $api_service;
-
     /**
      * The loader that's responsible for maintaining and registering all hooks that power
      * the plugin.
@@ -66,15 +56,6 @@ class Logora {
     protected $version;
 
     /**
-     * The unique Logora website shortname.
-     *
-     * @since    1.0
-     * @access   protected
-     * @var      string    $shortname    The unique Logora website shortname.
-     */
-    protected $shortname;
-    
-    /**
      * The name of the page where the Logora Debate Module is inserted.
      *
      * @since    1.0
@@ -97,13 +78,13 @@ class Logora {
 
         $this->logora = 'logora';
         $this->version = $version;
-        $this->shortname = strtolower( get_option( 'logora_website_url' ) );
         $this->logora_page_slug = 'logora-app-page';
 
         $this->load_dependencies();
         $this->define_admin_hooks();
         $this->define_debate_hooks();
         $this->define_metabox_hooks();
+        $this->define_shortcode_hooks();
     }
 
     /**
@@ -169,7 +150,13 @@ class Logora {
      * @access   private
      */
     private function define_admin_hooks() {
-        $plugin_admin = new Logora_Admin( $this->get_logora_name(), $this->get_version(), $this->get_shortname() );
+        $plugin_admin = new Logora_Admin( $this->get_logora_name(), $this->get_version() );
+        
+		// Add the options page and menu item.
+		$this->loader->add_action( 'admin_menu', $plugin_admin, 'add_plugin_admin_menu' );
+        
+        // Initialize settings and form
+        $this->loader->add_action( 'admin_init', $plugin_admin, 'settings_init' );
     }
 
     /**
@@ -179,14 +166,13 @@ class Logora {
      * @access   private
      */
     private function define_debate_hooks() {
-        $plugin_debate = new Logora_Debate( $this->get_logora_name(), $this->get_version(), $this->get_shortname(), $this->get_logora_page_slug() );
+        $plugin_debate = new Logora_Debate( $this->get_logora_name(), $this->get_version(), $this->get_logora_page_slug() );
 
-        $this->loader->add_filter( 'init', $plugin_debate, 'logora_rewrite_rules' );
         $this->loader->add_filter( 'template_include', $plugin_debate, 'load_template' );
         $this->loader->add_filter( 'show_admin_bar', $plugin_debate, 'show_admin_bar' );
+        $this->loader->add_action( 'init', $plugin_debate, 'add_rewrite_rules' );
         $this->loader->add_action( 'wp_print_scripts', $plugin_debate, 'dequeue_all_scripts' );
         $this->loader->add_action( 'wp_print_styles', $plugin_debate, 'dequeue_all_styles' );
-        $this->loader->add_action( 'wp_head', $plugin_debate, 'register_frontend_scripts' );
     }
     
     /**
@@ -196,12 +182,24 @@ class Logora {
      * @access   private
      */
     private function define_metabox_hooks() {
-        $plugin_metabox = new Logora_Metabox( $this->get_logora_name(), $this->get_version(), $this->get_shortname() );
+        $plugin_metabox = new Logora_Metabox( $this->get_logora_name(), $this->get_version() );
 
         $this->loader->add_action( 'add_meta_boxes', $plugin_metabox, 'add_meta_box' );
         $this->loader->add_action( 'save_pôst', $plugin_metabox, 'save_post', 10, 3 );
     }
 
+    /**
+     * Register all of the hooks related to shortcode functionality.
+     *
+     * @since    1.0
+     * @access   private
+     */
+    private function define_shortcode_hooks() {
+        $plugin_shortcode = new Logora_Shortcode( $this->get_logora_name(), $this->get_version() );
+
+		$this->loader->add_action('init', $plugin_shortcode, 'register_shortcode' );
+    }
+    
     /**
      * Run the loader to execute all of the hooks with WordPress.
      *
@@ -209,16 +207,6 @@ class Logora {
      */
     public function run() {
         $this->loader->run();
-    }
-
-    /**
-     * Returns instance of the Logora API service.
-     *
-     * @since     1.0
-     * @return    string    Instance of the Logora API service.
-     */
-    public function get_api_service() {
-        return $this->api_service;
     }
 
     /**
@@ -252,16 +240,6 @@ class Logora {
         return $this->version;
     }
 
-    /**
-     * Retrieve the installed Logora shortname.
-     *
-     * @since     1.0
-     * @return    string    The installed shortname.
-     */
-    public function get_shortname() {
-        return $this->shortname;
-    }
-    
     /**
      * Retrieve the Logora page name.
      *

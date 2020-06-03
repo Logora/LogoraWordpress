@@ -16,12 +16,7 @@
  * @subpackage Logora/includes
  * @author     Henry Boisgibault <henry@logora.fr>
  */
-class Logora_API {
-    protected $api_secret = null;
-    
-    public function __construct() {
-        $this->api_secret = $this->get_api_secret();
-    }
+class Logora_Utils {
     
     public function get_user_object() {
         $current_user = wp_get_current_user();
@@ -45,16 +40,11 @@ class Logora_API {
         if(!is_user_logged_in()) {
             return "";
         }
-        $secret = $this->api_secret;
+        $secret = get_option('logora_secret_key');
         $data = $this->get_user_object();
         $message = base64_encode(json_encode($data));
         $timestamp = time();
         $hmac = hash_hmac( 'sha1', $message . ' ' . $timestamp, $secret );
         return $message . ' ' . $hmac . ' ' . $timestamp;
-    }
-    
-    private function get_api_secret() {
-        $api_secret = get_option('logora_private_key');
-        return $api_secret;
     }
 }

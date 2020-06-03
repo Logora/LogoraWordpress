@@ -17,5 +17,8 @@ if ( ! current_user_can( 'install_plugins' ) ) {
 	exit;
 }
 
-delete_option( 'logora_public_key' );
-delete_option( 'logora_private_key' );
+delete_option( 'logora_shortname');
+delete_option( 'logora_secret_key');
+delete_option( 'logora_prefix_path');
+delete_option( 'logora_login_url');
+delete_option( 'logora_registration_url');
