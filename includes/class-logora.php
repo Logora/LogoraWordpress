@@ -135,10 +135,6 @@ class Logora {
          */
         require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-logora-utils.php';
 
-
-        $secret_key = get_option( 'logora_secret_key' );
-        $access_token = get_option( 'logora_admin_access_token' );
-
         $this->loader = new Logora_Loader();
     }
 
@@ -166,7 +162,7 @@ class Logora {
      * @access   private
      */
     private function define_debate_hooks() {
-        $plugin_debate = new Logora_Debate( $this->get_logora_name(), $this->get_version(), $this->get_logora_page_slug() );
+        $plugin_debate = new Logora_Debate( $this->get_logora_name(), $this->get_version() );
 
         $this->loader->add_filter( 'template_include', $plugin_debate, 'load_template' );
         $this->loader->add_filter( 'show_admin_bar', $plugin_debate, 'show_admin_bar' );
@@ -185,9 +181,9 @@ class Logora {
         $plugin_metabox = new Logora_Metabox( $this->get_logora_name(), $this->get_version() );
 
         $this->loader->add_action( 'add_meta_boxes', $plugin_metabox, 'add_meta_box' );
-        $this->loader->add_action( 'save_pôst', $plugin_metabox, 'save_post', 10, 3 );
+        $this->loader->add_action( 'save_post', $plugin_metabox, 'save_post', 10, 3 );
     }
-
+    
     /**
      * Register all of the hooks related to shortcode functionality.
      *

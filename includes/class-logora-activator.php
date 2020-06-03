@@ -30,8 +30,6 @@ class Logora_Activator {
     */
     public static function activate() {
         add_option( 'logora_prefix_path', 'espace-debat');
-        add_option( 'logora_login_url', wp_login_url());
-        add_option( 'logora_registration_url', wp_registration_url());
 
         self::add_logora_debate_page();
         self::add_rewrite_rules();

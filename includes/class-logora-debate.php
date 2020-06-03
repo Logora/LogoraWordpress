@@ -163,11 +163,11 @@ class Logora_Debate {
      * @access    public
      * @return    array            The embed configuration to localize the debate module script with.
 	 */
-	public static function embed_vars() {        
+	public static function embed_vars() {
 		$embed_vars = array(
             'shortname' => get_option('logora_shortname', ''),
-            'login_url' => get_option('logora_login_url', wp_login_url()),
-            'registration_url' => get_option('logora_registration_url', wp_registration_url()),
+            'auth' => array('login_url' => wp_http_validate_url(wp_login_url()),
+                            'registration_url' => wp_http_validate_url(wp_registration_url())),
             'provider' => array('name' => get_bloginfo('name'), 'url' => get_site_url()),
             'ga_tracking_id' => get_option('logora_ga_tracking_id'),
             'hideHeaders' => false,

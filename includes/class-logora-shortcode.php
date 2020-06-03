@@ -67,6 +67,10 @@ class Logora_Shortcode {
 	public function shortcode( $atts ) {
         global $post;
         
+        if( ! $this->embed_can_load_for_post( $post )) {
+            return false;
+        }
+        
         $logora_utils = new Logora_Utils();
         $remote_auth = $logora_utils->get_sso_auth();
         
@@ -74,7 +78,6 @@ class Logora_Shortcode {
 
         $post_id = $post->ID;
         $allowDebate = get_post_meta($post_id, "logora_allow_debate", true);
-        $showDebate = get_post_meta($post_id, "logora_show_debate", true);
         $debateTitle = get_post_meta($post_id, 'logora_debate_title', true);
         $debateProThesis = get_post_meta($post_id, 'logora_debate_pro_thesis', true);
         $debateAgainstThesis = get_post_meta($post_id, 'logora_debate_against_thesis', true);
@@ -89,15 +92,24 @@ class Logora_Shortcode {
         }
         $postUrl = get_the_permalink($post_id);
         
-        $debateObject = ($allowDebate && $showDebate) ? array('source_url' => $postUrl, 'tags' => implode(',', $postTags), 'image_url' => $thumbnailUrl, 'identifier' => $post_id, 'name' => $debateTitle, 'pro_side' => $debateProThesis, 'against_side' => $debateAgainstThesis, 'started' => true) : array();
+        $debateObject = $allowDebate ? array(
+                'source_url' => $postUrl, 
+                'tags' => implode(',', $postTags), 
+                'image_url' => $thumbnailUrl, 
+                'identifier' => $post_id, 
+                'name' => $debateTitle, 
+                'pro_side' => $debateProThesis, 
+                'against_side' => $debateAgainstThesis,
+                'started' => true
+        ) : array();
         
 		$object = array(
             'shortname' => get_option('logora_shortname'),
             'debate' => $debateObject,
             'remote_auth' => $remote_auth,
             'provider' => array('url' => get_site_url(), 'name' => get_bloginfo('name')),
-            'login_url' => get_option('logora_login_url', wp_login_url()),
-            'registration_url' => get_option('logora_registration_url', wp_registration_url()),
+            'auth' => array('login_url' => wp_http_validate_url(wp_login_url()),
+                            'registration_url' => wp_http_validate_url(wp_registration_url())),
             'hasVote' => true
 		);
         
@@ -113,4 +125,41 @@ class Logora_Shortcode {
                       </script>";
 		return $shortcode;
 	}
+    
+    
+    /**
+	 * Determines if Logora is configured and can the debate synthesis embed on a given page.
+	 *
+	 * @since     1.0
+	 * @access    private
+	 * @param     WP_Post $post    The WordPress post used to determine if Logora can be loaded.
+	 * @return    boolean          Whether Logora is configured properly and can load on the current page.
+	 */
+    private function embed_can_load_for_post( $post ) {
+		if ( is_feed() ) {
+			return false;
+        }
+        
+        $illegal_post_statuses = array(
+			'draft',
+			'auto-draft',
+			'pending',
+			'future',
+			'trash',
+		);
+        
+        $postStatus = $post->post_status;
+        
+         if( in_array( $postStatus, $illegal_post_statuses ) ) {
+            return false;
+        }
+        
+        $shortname = get_option('logora_shortname', '');
+        
+        if( ! $shortname ) {
+            return false;
+        }
+        
+        return true;
+    }
 }

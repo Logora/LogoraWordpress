@@ -66,9 +66,11 @@ class Logora_Metabox {
 		}
 		// OLD WP
 		else {
-			foreach( $post_types as $ptype )
+			foreach( $post_types as $ptype ) {
 				add_meta_box( 'logora-metabox', __('Logora','logora'), array( __CLASS__, 'meta_box' ), $ptype, 'side' );
+            }
 		}
+        add_action( 'save_pôst', array($this, 'save_post'), 10, 3 );
 	}
 
     /**
@@ -105,54 +107,34 @@ class Logora_Metabox {
      * @param    $post          The Wordpress post related to the metabox
      * @param    $update        A boolean that defines whether post is created or updated
      */
-	public static function save_post( $post_id, $post, $update) {
-        $postTitle = get_the_title( $post_id );
-        $postStatus = $post->post_status;
-        $debateTitle = get_post_meta($post_id, "logora_debate_title", true);
-		$allowDebate = get_post_meta($post_id, "logora_allow_debate", true);
-        $showDebate = get_post_meta($post_id, "logora_show_debate", true );
-        
-        $illegal_post_statuses = array(
-			'draft',
-			'auto-draft',
-			'pending',
-			'future',
-			'trash',
-		);
-        
+	public static function save_post( $post_id, $post, $update) {        
         if( array_key_exists("logora_metabox_allow_debate", $_POST)) {
-            $allowDebate = $_POST['logora_metabox_allow_debate'];
+            $allowDebate = esc_attr($_POST['logora_metabox_allow_debate']);
             if($allowDebate == 'is_allowed') {
                 update_post_meta( $post_id, "logora_allow_debate", true );
-                update_post_meta( $post_id, "logora_show_debate", true );
+            } else {
+                update_post_meta( $post_id, "logora_allow_debate", false );
             }
         } else {
             update_post_meta( $post_id, "logora_allow_debate", false );
-            update_post_meta( $post_id, "logora_show_debate", false );            
-        }
-        
-        if( in_array( $postStatus, $illegal_post_statuses ) ) {
-            update_post_meta( $post_id, "logora_show_debate", false );
         }
         
 		if( isset($_POST['logora_metabox_debate_title']) && !empty($_POST['logora_metabox_debate_title'])) {
-            $debateTitle = $_POST['logora_metabox_debate_title'];
+            $debateTitle = esc_attr($_POST['logora_metabox_debate_title']);
         } else {
-            if( !in_array( $postStatus, $illegal_post_statuses ) ) {
-                $debateTitle = $postTitle;
-            }
+            $debateTitle = get_the_title( $post_id );
         }
         update_post_meta( $post_id, "logora_debate_title", $debateTitle);
         
         if( isset($_POST['logora_metabox_debate_pro_thesis']) && !empty($_POST['logora_metabox_debate_pro_thesis']) ) {
-            $debateProThesis = $_POST['logora_metabox_debate_pro_thesis'];
+            $debateProThesis = esc_attr($_POST['logora_metabox_debate_pro_thesis']);
         } else {
             $debateProThesis = "Pour";
         }
         update_post_meta( $post_id, "logora_debate_pro_thesis", $debateProThesis );
         
         if( isset($_POST['logora_metabox_debate_against_thesis']) && !empty($_POST['logora_metabox_debate_against_thesis'])) {
-            $debateAgainstThesis = $_POST['logora_metabox_debate_against_thesis'];
+            $debateAgainstThesis = esc_attr($_POST['logora_metabox_debate_against_thesis']);
         } else {
             $debateAgainstThesis = "Contre";
         }

@@ -89,7 +89,7 @@ class Logora_Admin {
                 'label_for' => 'logora_secret_key',
                 'type' => 'password',
                 'option_name' => 'logora_secret_key',
-                'description' => "La clé secrète votre application disponible dans l'espace d'administration Logora",
+                'description' => "La clé secrète de votre application disponible dans l'espace d'administration Logora",
             )
         );
         
