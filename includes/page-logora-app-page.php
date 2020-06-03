@@ -15,7 +15,7 @@
         <script>
             var logora_config = <?php echo json_encode( $embed_vars ); ?>;
             <?php
-                $api_debate_url = getenv("LOGORA_MODE") === 'staging' ? 'https://d2d2dbh4kbp3fl.cloudfront.net/debat.js' : 'https://api.logora.fr/debat.js';
+                $api_debate_url = 'https://api.logora.fr/debat.js';
             ?>    
             (function() {
                 var d = document, s = d.createElement('script');

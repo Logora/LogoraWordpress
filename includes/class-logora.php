@@ -21,7 +21,7 @@
  * Also maintains the unique identifier of this plugin as well as the current
  * version of the plugin.
  *
- * @since      3.0
+ * @since      1.0
  * @package    Logora
  * @subpackage Logora/includes
  * @author     Henry Boisgibault <henry@logora.fr>
@@ -72,6 +72,7 @@ class Logora {
      * side of the site.
      *
      * @since    1.0
+     * @access   public
      * @param    string $version    The version of this plugin.
      */
     public function __construct( $version ) {
@@ -94,7 +95,9 @@ class Logora {
      *
      * - Logora_Loader. Orchestrates the hooks of the plugin.
      * - Logora_Admin. Defines all hooks for the admin area.
-     * - Logora_Public. Defines all hooks for the public side of the site.
+     * - Logora_Debate. Defines all hooks for the debate module.
+     * - Logora_Metabox. Defines all hooks for the metabox.
+     * - Logora_Shortcode. Defines all hooks for the shortcode.
      *
      * Create an instance of the loader which will be used to register the hooks
      * with WordPress.

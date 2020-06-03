@@ -129,7 +129,7 @@ class Logora_Shortcode {
                             'registration_url' => wp_http_validate_url(wp_registration_url()))
 		);
         
-        $api_shortcode_url = getenv("LOGORA_MODE") === 'staging' ? 'https://d2d2dbh4kbp3fl.cloudfront.net/synthese.js' : 'https://api.logora.fr/synthese.js';
+        $api_shortcode_url = 'https://api.logora.fr/synthese.js';
 		$shortcode = "<div class='logora_synthese' data-object-id=\"".$object_name."\"></div>
                       ". self::logora_config_script($object_name, $object) ."
                       <script>
