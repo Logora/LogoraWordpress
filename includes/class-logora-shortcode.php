@@ -126,7 +126,10 @@ class Logora_Shortcode {
             'remote_auth' => $remote_auth,
             'provider' => array('url' => get_site_url(), 'name' => get_bloginfo('name')),
             'auth' => array('login_url' => wp_http_validate_url(wp_login_url()),
-                            'registration_url' => wp_http_validate_url(wp_registration_url()))
+                            'registration_url' => wp_http_validate_url(wp_registration_url())),
+            'synthesis' => array( 'auto_create_debate' => true,
+                                  'autoFetchSource' => true,
+                                  'loadAuth' => false )
 		);
         
         $api_shortcode_url = 'https://api.logora.fr/synthese.js';
