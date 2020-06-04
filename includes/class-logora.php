@@ -85,7 +85,8 @@ class Logora {
         $this->define_admin_hooks();
         $this->define_debate_hooks();
         $this->define_metabox_hooks();
-        $this->define_shortcode_hooks();
+        $this->define_synthesis_shortcode_hooks();
+        $this->define_app_shortcode_hooks();
     }
 
     /**
@@ -97,7 +98,8 @@ class Logora {
      * - Logora_Admin. Defines all hooks for the admin area.
      * - Logora_Debate. Defines all hooks for the debate module.
      * - Logora_Metabox. Defines all hooks for the metabox.
-     * - Logora_Shortcode. Defines all hooks for the shortcode.
+     * - Logora_Synthesis_Shortcode. Defines all hooks for the shortcode.
+     * - Logora_App_Shortcode. Defines all hooks for the shortcode.
      *
      * Create an instance of the loader which will be used to register the hooks
      * with WordPress.
@@ -124,9 +126,14 @@ class Logora {
         require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-logora-debate.php';
         
         /**
-         * The class responsible for defining the shortcode
+         * The class responsible for defining the debate app shortcode
          */
-        require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-logora-shortcode.php';
+        require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-logora-app-shortcode.php';
+        
+        /**
+         * The class responsible for defining the debate synthesis shortcode
+         */
+        require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-logora-synthesis-shortcode.php';
         
         /**
          * The class responsible for defining the post metabox
@@ -193,10 +200,24 @@ class Logora {
      * @since    1.0
      * @access   private
      */
-    private function define_shortcode_hooks() {
-        $plugin_shortcode = new Logora_Shortcode( $this->get_logora_name(), $this->get_version() );
+    private function define_synthesis_shortcode_hooks() {
+        $plugin_shortcode = new Logora_Synthesis_Shortcode( $this->get_logora_name(), $this->get_version() );
 
 		$this->loader->add_action('init', $plugin_shortcode, 'register_shortcode' );
+    }
+    
+    /**
+     * Register all of the hooks related to shortcode functionality.
+     *
+     * @since    1.0
+     * @access   private
+     */
+    private function define_app_shortcode_hooks() {
+        $plugin_shortcode = new Logora_App_Shortcode( $this->get_logora_name(), $this->get_version() );
+
+		$this->loader->add_action('init', $plugin_shortcode, 'register_shortcode' );
+        $this->loader->add_action( 'init', $plugin_shortcode, 'add_rewrite_rules' );
+        $this->loader->add_action( 'wp_enqueue_scripts', $plugin_shortcode, 'register_scripts' );
     }
     
     /**
