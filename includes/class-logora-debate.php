@@ -83,23 +83,6 @@ class Logora_Debate {
         return true;
     }
     
-    public function login_redirect($redirect_to, $request, $user) {
-        $logora_redirect_key = 'logora_redirect';
-        if($user && is_object( $user ) && is_a( $user, 'WP_User' )) {
-            if(isset($_POST['redirect_to'])) {
-                return  $_POST['redirect_to'];
-            } else {
-                return $redirect_to;
-            }
-        } else {
-            if(isset($_GET[$logora_redirect_key])) {
-                return $_GET[$logora_redirect_key];
-            } else {
-                return $redirect_to;
-            }
-        }
-    }
-    
     /**
      * Removes all scripts on the Logora Debate page.
      *
