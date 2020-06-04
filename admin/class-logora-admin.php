@@ -151,7 +151,7 @@ class Logora_Admin {
 		/*
 		 * Add a settings page for this plugin to the Settings menu.
 		 */
-		$this->plugin_screen_hook_suffix = add_options_page(
+		$this->plugin_screen_hook_suffix = add_menu_page(
 			__( 'Logora', $this->logora ),
 			__( 'Logora', $this->logora ),
 			'manage_options',

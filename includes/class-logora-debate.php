@@ -182,10 +182,12 @@ class Logora_Debate {
 		$embed_vars = array(
             'shortname' => get_option('logora_shortname', ''),
             'auth' => array('login_url' => wp_http_validate_url(wp_login_url()),
-                            'registration_url' => wp_http_validate_url(wp_registration_url())),
+                            'registration_url' => wp_http_validate_url(wp_registration_url()),
+                            'redirectParameter' => 'redirect_to' ),
             'provider' => array('name' => get_bloginfo('name'), 'url' => get_site_url()),
             'ga_tracking_id' => get_option('logora_ga_tracking_id'),
             'hideHeaders' => false,
+            'layout' => array( 'hideProviderNavbar' => false )
 		);
         
         if(is_user_logged_in()) {
