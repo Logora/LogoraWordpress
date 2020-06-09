@@ -130,27 +130,6 @@ class Logora_Debate {
                 'index.php?pagename=logora-app-page',
                 'top'
             );
-        } else {
-            add_rewrite_rule(
-                '^debat/[a-zA-Z0-9-]{0,100}$',
-                'index.php?pagename=logora-app-page',
-                'top'
-            );
-            add_rewrite_rule(
-                '^user/[a-zA-Z0-9-]{0,100}$',
-                'index.php?pagename=logora-app-page',
-                'top'
-            );
-            add_rewrite_rule(
-                '^search/?$',
-                'index.php?pagename=logora-app-page',
-                'top'
-            );
-            add_rewrite_rule(
-                '^debats/?$',
-                'index.php?pagename=logora-app-page',
-                'top'
-            );
         }
     }
     

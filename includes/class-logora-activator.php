@@ -48,14 +48,13 @@ class Logora_Activator {
           // Create post/page object
           $logora_app_page = array(
               'post_title' => 'Logora App Page',
-              'post_name' => 'logora-app-page',
-              'post_content' => '',
+              'post_name' => get_option('logora_prefix_path'),
+              'post_content' => '[logora-app]',
               'post_status' => 'publish',
               'post_type' => 'page'
           );
           // Insert the post into the database
           $my_page = wp_insert_post( $logora_app_page );
-          update_option('logora-app-page', $my_page);
         }
     }
     
@@ -68,32 +67,11 @@ class Logora_Activator {
      */
     private static function add_rewrite_rules()
     {
-        $prefix_path = get_option('logora_prefix_path', "");
+        $prefix_path = get_option('logora_prefix_path');
         if(!empty($prefix_path)) {
             add_rewrite_rule(
                 '^'. $prefix_path .'[\S]*$',
-                'index.php?pagename=logora-app-page',
-                'top'
-            );
-        } else {
-            add_rewrite_rule(
-                '^debat/[a-zA-Z0-9-]{0,100}$',
-                'index.php?pagename=logora-app-page',
-                'top'
-            );
-            add_rewrite_rule(
-                '^user/[a-zA-Z0-9-]{0,100}$',
-                'index.php?pagename=logora-app-page',
-                'top'
-            );
-            add_rewrite_rule(
-                '^search/?$',
-                'index.php?pagename=logora-app-page',
-                'top'
-            );
-            add_rewrite_rule(
-                '^debats/?$',
-                'index.php?pagename=logora-app-page',
+                'index.php?pagename=' . $prefix_path,
                 'top'
             );
         }

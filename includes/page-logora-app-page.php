@@ -8,20 +8,8 @@
         <?php wp_head(); ?>
     </head>
     <body>
-        <div id="logora_app"></div>
         <?php
-            $embed_vars = Logora_Debate::embed_vars();
-        ?>
-        <script>
-            var logora_config = <?php echo json_encode( $embed_vars ); ?>;
-            <?php
-                $api_debate_url = 'https://api.logora.fr/debat.js';
-            ?>    
-            (function() {
-                var d = document, s = d.createElement('script');
-                s.src = "<?php echo $api_debate_url ?>";
-                (d.head || d.body).appendChild(s);
-            })();
-        </script>
+		the_content();
+		?>
     </body>
 </html>
