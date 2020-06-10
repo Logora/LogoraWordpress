@@ -1,15 +1,23 @@
-<?php /* Template Name: Logora App Page */ ?>
-<!DOCTYPE html>
-<html class="no-js mh-disable-sb" lang="fr-FR">
-    <head>
-        <title>L'espace de débat</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta charset="utf-8" />
-        <?php wp_head(); ?>
-    </head>
-    <body>
-        <?php
-		the_content();
-		?>
-    </body>
-</html>
+<?php
+/**
+ * Template Name: Logora App Page
+ *
+ * @package Logora
+ * @subpackage Logora App Page
+ * @since 1.0.0
+ */
+get_header();
+?>
+	<section id="primary" class="content-area">
+		<main id="main" class="site-main">
+			<div class="entry-content">
+                <?php
+                    while ( have_posts() ) : the_post();
+                        the_content();
+                    endwhile; // End of the loop.
+                ?>
+             </div>    
+		</main>
+	</section>
+<?php
+get_footer();

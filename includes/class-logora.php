@@ -175,10 +175,6 @@ class Logora {
         $plugin_debate = new Logora_Debate( $this->get_logora_name(), $this->get_version() );
 
         $this->loader->add_filter( 'template_include', $plugin_debate, 'load_template' );
-        $this->loader->add_filter( 'show_admin_bar', $plugin_debate, 'show_admin_bar' );
-        $this->loader->add_action( 'init', $plugin_debate, 'add_rewrite_rules' );
-        $this->loader->add_action( 'wp_print_scripts', $plugin_debate, 'dequeue_all_scripts' );
-        $this->loader->add_action( 'wp_print_styles', $plugin_debate, 'dequeue_all_styles' );
     }
     
     /**
