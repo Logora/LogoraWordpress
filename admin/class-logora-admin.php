@@ -56,7 +56,7 @@ class Logora_Admin {
     public function settings_init() {        
         add_settings_section(
          'logora_main_settings',
-         'Général',
+         __('Main', 'logora'),
          array($this, 'logora_section_main_cb'),
          'logora'
         );
@@ -67,7 +67,7 @@ class Logora_Admin {
         
         add_settings_field(
             'logora_shortname',
-            "Nom d'application",
+            __("Application name", 'logora'),
             array($this, 'logora_input_field_cb'),
             'logora',
             'logora_main_settings',
@@ -75,13 +75,13 @@ class Logora_Admin {
                 'label_for' => 'logora_shortname',
                 'type' => 'text',
                 'option_name' => 'logora_shortname',
-                'description' => "Le nom de votre application disponible dans l'espace d'administration Logora",
+                'description' => __("Your application name is available in your Logora administration panel", 'logora'),
             )
         );
         
         add_settings_field(
             'logora_secret_key',
-            "Clé secrète",
+            __("Secret key", 'logora'),
             array($this, 'logora_input_field_cb'),
             'logora',
             'logora_main_settings',
@@ -89,13 +89,13 @@ class Logora_Admin {
                 'label_for' => 'logora_secret_key',
                 'type' => 'password',
                 'option_name' => 'logora_secret_key',
-                'description' => "La clé secrète de votre application disponible dans l'espace d'administration Logora",
+                'description' => __("Your secret key is available in your Logora administration panel", 'logora'),
             )
         );
         
         add_settings_field(
             'logora_prefix_path',
-            "Chemin de l'espace de débat",
+            __("Path to the debate space", 'logora'),
             array($this, 'logora_input_field_cb'),
             'logora',
             'logora_main_settings',
@@ -103,7 +103,7 @@ class Logora_Admin {
                 'label_for' => 'logora_prefix_path',
                 'type' => 'text',
                 'option_name' => 'logora_prefix_path',
-                'description' => "Le chemin vers l'espace de débat. Rafraîchissez les permaliens après avoir modifié ce champ",
+                'description' => __("Path to the debate space. Refresh permalinks after changing this setting", 'logora'),
             )
         );
     }
@@ -116,7 +116,7 @@ class Logora_Admin {
 	 * @return    None
 	 */
     public function logora_section_main_cb( $args ) {
-        echo "<span>Pour finaliser l'installation de Logora, rentrez votre nom d'application et votre clé secrète, disponibles dans <a href='https://admin.logora.fr' target='_blank'>votre espace d'administration</a>.</span><br>";
+        echo '<span>'. _e("To finalize the Logora installation, input your application name and secret key that can be found in", 'logora') .'<a href="https://admin.logora.fr" target="_blank">'. _e("your administration panel", 'logora') .'</a>.</span><br>';
     }
     
     /**
@@ -191,7 +191,7 @@ class Logora_Admin {
                 // output setting sections and their fields
                 do_settings_sections( 'logora' );
                 // output save settings button
-                submit_button( 'Enregistrer' );
+                submit_button( __( 'Save', 'logora' ));
                 ?>
             </form>
         </div>

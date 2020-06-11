@@ -62,12 +62,12 @@ class Logora_Metabox {
 
 		// WP 4.4+
 		if( function_exists('get_term_meta') ){
-			add_meta_box( 'logora-metabox', __('Logora','logora'), array( __CLASS__, 'meta_box' ), $post_types, 'side' );
+			add_meta_box( 'logora-metabox', __('Logora', $this->logora), array( __CLASS__, 'meta_box' ), $post_types, 'side' );
 		}
 		// OLD WP
 		else {
 			foreach( $post_types as $ptype ) {
-				add_meta_box( 'logora-metabox', __('Logora','logora'), array( __CLASS__, 'meta_box' ), $ptype, 'side' );
+				add_meta_box( 'logora-metabox', __('Logora', $this->logora), array( __CLASS__, 'meta_box' ), $ptype, 'side' );
             }
 		}
 	}
@@ -88,12 +88,12 @@ class Logora_Metabox {
         
 		echo '
         <input type="checkbox" name="logora_metabox_allow_debate" value="is_allowed" '. $checked .' />
-        <label for="logora_metabox_allow_debate">Autoriser le débat pour cet article</label><br><br>
-        <label for="logora_metabox_debate_title">Question liée à l\'article (par défaut, titre de l\'article) :</label>
+        <label for="logora_metabox_allow_debate">'. _e("Allow debate for this post", 'logora') .'</label><br><br>
+        <label for="logora_metabox_debate_title">'. _e("Debate question", 'logora') .'</label>
 		<input type="text" name="logora_metabox_debate_title" style="width:100%" value="'. $debateTitle .'" />
-		<label for="logora_metabox_debate_pro_thesis">Thèse pour (par défaut, Pour) :</label>
+		<label for="logora_metabox_debate_pro_thesis">'. _e("Side 1", 'logora') .'</label>
 		<input type="text" name="logora_metabox_debate_pro_thesis" style="width:100%" value="'. $debateProThesis .'" />
-        <label for="logora_metabox_debate_against_thesis">Thèse contre (par défaut, Contre) :</label>
+        <label for="logora_metabox_debate_against_thesis">'. _e("Side 2", 'logora') .'</label>
 		<input type="text" name="logora_metabox_debate_against_thesis" style="width:100%" value="'. $debateAgainstThesis .'" />
         ';
 	}
@@ -128,14 +128,14 @@ class Logora_Metabox {
         if( isset($_POST['logora_metabox_debate_pro_thesis']) && !empty($_POST['logora_metabox_debate_pro_thesis']) ) {
             $debateProThesis = esc_attr($_POST['logora_metabox_debate_pro_thesis']);
         } else {
-            $debateProThesis = "Pour";
+            $debateProThesis = __("Yes", 'logora');
         }
         update_post_meta( $post_id, "logora_debate_pro_thesis", $debateProThesis );
         
         if( isset($_POST['logora_metabox_debate_against_thesis']) && !empty($_POST['logora_metabox_debate_against_thesis'])) {
             $debateAgainstThesis = esc_attr($_POST['logora_metabox_debate_against_thesis']);
         } else {
-            $debateAgainstThesis = "Contre";
+            $debateAgainstThesis = __("No", 'logora');
         }
         update_post_meta( $post_id, "logora_debate_against_thesis", $debateAgainstThesis );
 	}

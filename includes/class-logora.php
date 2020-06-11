@@ -87,6 +87,8 @@ class Logora {
         $this->define_metabox_hooks();
         $this->define_synthesis_shortcode_hooks();
         $this->define_app_shortcode_hooks();
+        
+        $this->loader->add_action( 'plugins_loaded', $this, 'logora_load_plugin_textdomain' );
     }
 
     /**
@@ -146,6 +148,16 @@ class Logora {
         require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-logora-utils.php';
 
         $this->loader = new Logora_Loader();
+    }
+    
+    /**
+     * Register plugin text domains
+     *
+     * @since    1.0
+     * @access   public
+     */
+    public function logora_load_plugin_textdomain() {
+        load_plugin_textdomain( 'logora', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
     }
 
     /**
