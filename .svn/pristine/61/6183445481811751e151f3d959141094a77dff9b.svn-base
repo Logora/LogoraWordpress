@@ -16,7 +16,7 @@
  * Plugin Name:       Logora
  * Plugin URI:        https://logora.fr
  * Description:       Logora helps publishers create an engaged debate community.
- * Version:           1.1.4
+ * Version:           1.1.3
  * Author:            Logora
  * Author URI:        https://logora.fr
  * Text Domain:       logora
@@ -25,7 +25,7 @@
  * Domain Path:       /languages
  */
 
-$LOGORAVERSION = '1.1.4';
+$LOGORAVERSION = '1.1.3';
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
