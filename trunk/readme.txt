@@ -1,9 +1,9 @@
 === Logora ===
 Contributors: henryboisgibault
-Tags: debate, comments, threaded, email, notification, spam, avatars, community, profile, widget, logora
+Tags: debate, comments, conversation, threaded, email, notification, spam, avatars, community, profile, widget, logora
 Requires at least: 4.6
-Tested up to: 5.5
-Stable tag: 1.1.5
+Tested up to: 5.8.2
+Stable tag: 1.1.6
 Requires PHP: 5.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -84,3 +84,6 @@ Check out our [Documentation](https://docs.logora.fr) or contact us at support@l
 
 = 1.1.5 =
 * Bug fixes and improvements
+
+= 1.1.6 =
+* Insert Logora code in posts by default

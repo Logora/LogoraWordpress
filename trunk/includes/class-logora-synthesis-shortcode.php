@@ -189,9 +189,10 @@ class Logora_Synthesis_Shortcode {
             return false;
         }
 		
+		$allowDebateExists = metadata_exists('post', $post->ID, 'logora_allow_debate');
 		$allowDebate = get_post_meta($post->ID, "logora_allow_debate", true);
 		
-		if(empty($allowDebate)) {
+		if($allowDebateExists && empty($allowDebate)) {
 			return false;
 		}
         
