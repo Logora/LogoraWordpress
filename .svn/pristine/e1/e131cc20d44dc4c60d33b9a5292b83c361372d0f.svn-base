@@ -71,25 +71,6 @@ class Logora_App_Shortcode {
                 var '. $object_name .' = '. json_encode($object) .';
             </script>';
     }
-	
-	/**
-     * Adds rewriting rules for the Logora App Shortcode
-     *
-     * @since   1.0.0
-     * @access  public
-     * @return  None
-     */
-    public function add_rewrite_rules()
-    {
-        $prefix_path = get_option('logora_prefix_path');
-        if(!empty($prefix_path)) {
-            add_rewrite_rule(
-                '^'. $prefix_path .'[\S]*$',
-                'index.php?pagename=' . $prefix_path,
-                'top'
-            );
-        }
-    }
     
     /**
      * Generates the code embedded by the shortcode.
