@@ -70,54 +70,54 @@ class Logora_Metabox {
      * @param    $post       The Wordpress post related to the metabox
      */
 	public static function meta_box_html( $post ) {
-        wp_nonce_field(basename(__FILE__), "logora_metabox_nonce");
 		$debateTitle = $post->logora_debate_title;
 		$debateProThesis = $post->logora_debate_pro_thesis;
 		$debateAgainstThesis = $post->logora_debate_against_thesis;
-        $allowDebate = get_post_meta($post->ID, 'logora_allow_debate', true);
-
-        if(!metadata_exists('post', $post->ID, 'logora_allow_debate')) {   
-            $allowDebate = 'is_allowed'; 
+        $debate_allowed = $post->logora_allow_debate;
+        if(!metadata_exists('post', $post->ID, 'logora_allow_debate')) {
+            $debate_allowed = true;
         }
+
+        wp_nonce_field('save_metabox_data', "logora_metabox_nonce");
+
         ?>
-			<input type="checkbox" name="logora_metabox_allow_debate" value="is_allowed" <?php checked( $allowDebate, 'is_allowed' ) ?> />
-			<label for="logora_metabox_allow_debate"><?php __("Allow debate for this post", 'logora') ?></label><br><br>
-			<label for="logora_metabox_debate_title"><?php __("Debate question", 'logora') ?></label>
-			<input type="text" name="logora_metabox_debate_title" style="width:100%" value="<?php $debateTitle ?>" />
-			<label for="logora_metabox_debate_pro_thesis"><?php __("Side 1", 'logora') ?></label>
-			<input type="text" name="logora_metabox_debate_pro_thesis" style="width:100%" value="<?php $debateProThesis ?>" />
-			<label for="logora_metabox_debate_against_thesis"><?php __("Side 2", 'logora') ?></label>
-			<input type="text" name="logora_metabox_debate_against_thesis" style="width:100%" value="<?php $debateAgainstThesis ?>" />
+			<input type="checkbox" name="logora_metabox_allow_debate" id="logora_metabox_allow_debate" <?php checked($debate_allowed, true); ?> />
+			<label for="logora_metabox_allow_debate"><?php echo __("Allow debate for this post", 'logora') ?></label><br><br>
+			<label for="logora_metabox_debate_title"><?php echo __("Debate question", 'logora') ?></label>
+			<input type="text" name="logora_metabox_debate_title" style="width:100%" value="<?php echo $debateTitle ?>" />
+			<label for="logora_metabox_debate_pro_thesis"><?php echo __("Side 1", 'logora') ?></label>
+			<input type="text" name="logora_metabox_debate_pro_thesis" style="width:100%" value="<?php echo $debateProThesis ?>" />
+			<label for="logora_metabox_debate_against_thesis"><?php echo __("Side 2", 'logora') ?></label>
+			<input type="text" name="logora_metabox_debate_against_thesis" style="width:100%" value="<?php echo $debateAgainstThesis ?>" />
         <?php
 	}
 
     /**
      * A hook to save post metadata defined by the metabox inputs.
      *
-     * @since    1.0.0
+     * @since    1.2.0
      * @param    $post_id       The Wordpress post ID related to the metabox
      * @param    $post          The Wordpress post related to the metabox
      * @param    $update        A boolean that defines whether post is created or updated
      */
-	public static function save_post( $post_id, $post, $update) {
-        $is_autosave = wp_is_post_autosave( $post_id );
-        $is_revision = wp_is_post_revision( $post_id );
-        $is_valid_nonce = ( isset( $_POST[ 'logora_metabox_nonce' ] ) && wp_verify_nonce( $_POST[ 'logora_metabox_nonce' ], basename( __FILE__ ) ) ) ? 'true' : 'false';
-       
+	public static function save_metabox_data( $post_id, $post, $update) {
         // Exits depending on save status
-        if ( $is_autosave || $is_revision || !$is_valid_nonce ) {
+        if(!isset($_POST['logora_metabox_nonce']) || !wp_verify_nonce($_POST['logora_metabox_nonce'], 'save_metabox_data')){
             return;
         }
 		
-		if (wp_verify_nonce($_POST['_inline_edit'], 'inlineeditnonce')) {
-			return;	
-		}
+        if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
+            return;
+        }
+    
+        if ( ! current_user_can( 'edit_post', $post_id ) ) {
+            return;
+        }
 
-        // Checks for input and saves
-        if( isset( $_POST[ 'logora_metabox_allow_debate' ] ) ) {
-            update_post_meta( $post_id, 'logora_allow_debate', 'is_allowed');
+        if(isset($_POST['logora_metabox_allow_debate'])) {
+            update_post_meta($post_id, 'logora_allow_debate', true);
         } else {
-            update_post_meta( $post_id, 'logora_allow_debate', '' );
+            update_post_meta($post_id, 'logora_allow_debate', false);
         }
         
 		$debateTitle = "";

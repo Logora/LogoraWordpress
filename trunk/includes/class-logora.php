@@ -205,7 +205,7 @@ class Logora {
         $plugin_metabox = new Logora_Metabox( $this->get_logora_name(), $this->get_version() );
 
         $this->loader->add_action( 'add_meta_boxes', $plugin_metabox, 'add_meta_box' );
-        $this->loader->add_action( 'save_post', $plugin_metabox, 'save_post', 10, 3 );
+        $this->loader->add_action( 'save_post', $plugin_metabox, 'save_metabox_data', 10, 3 );
     }
     
     /**

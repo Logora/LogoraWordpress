@@ -112,13 +112,14 @@ class Logora_App_Shortcode {
             'shortname' => get_option('logora_shortname'),
             'provider' => array('url' => get_site_url(), 'name' => get_bloginfo('name'))
 		);
-        
+
         $sso_enabled = get_option('logora_enable_sso', true);
         if($sso_enabled) {
             $auth = array(
                 'type' => 'signature_jwt', 
                 'login_url' => wp_http_validate_url(wp_login_url()),
-                'registration_url' => wp_http_validate_url(wp_registration_url())
+                'registration_url' => wp_http_validate_url(wp_registration_url()),
+                'redirectParameter' => 'redirect_to'
             );
             $embed_vars['auth'] = $auth;
 
