@@ -38,27 +38,37 @@ class Logora_Utils {
             "uid" => $current_user->ID,
             "first_name" => $first_name,
             "last_name" => $last_name,
-            "email" => $current_user->user_email,
-            "image_url" => $user_image
+            "email" => $current_user->user_email
         );
     }
     
     /**
-	 * Returns the Single Sign-On message for current user.
+	 * Returns the JWT token to sign-in user, if logged in.
 	 *
 	 * @since     1.0.0
 	 * @access    public
-	 * @return    string      Message composed of the user payload, current timestamp, and signature.
+	 * @return    string      Message composed of the JWT token. Empty string if user is not logged in.
 	 */
     public function get_sso_auth() {
         if(!is_user_logged_in()) {
             return "";
         }
         $secret = get_option('logora_secret_key');
-        $data = $this->get_user_object();
-        $message = base64_encode(json_encode($data));
-        $timestamp = time();
-        $hmac = hash_hmac( 'sha1', $message . ' ' . $timestamp, $secret );
-        return $message . ' ' . $hmac . ' ' . $timestamp;
+
+        if(!$secret) {
+            return "";
+        }
+
+        $header = json_encode(['typ' => 'JWT', 'alg' => 'HS256']);
+        $payload = json_encode($this->get_user_object());
+
+        $base64UrlHeader = str_replace(['+', '/', '='], ['-', '_', ''], base64_encode($header));
+        $base64UrlPayload = str_replace(['+', '/', '='], ['-', '_', ''], base64_encode($payload));
+
+        $signature = hash_hmac('sha256', $base64UrlHeader . "." . $base64UrlPayload, $secret, true);
+        $base64UrlSignature = str_replace(['+', '/', '='], ['-', '_', ''], base64_encode($signature));
+
+        $jwt = $base64UrlHeader . "." . $base64UrlPayload . "." . $base64UrlSignature;
+        return $jwt;
     }
 }

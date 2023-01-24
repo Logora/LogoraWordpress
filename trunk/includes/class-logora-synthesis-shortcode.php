@@ -137,9 +137,7 @@ class Logora_Synthesis_Shortcode {
             'shortname' => get_option('logora_shortname'),
             'debate' => $debateObject,
 			'source' => $sourceObject,
-            'provider' => array('url' => get_site_url(), 'name' => get_bloginfo('name')),
-            'auth' => array('login_url' => wp_http_validate_url(wp_login_url()),
-                            'registration_url' => wp_http_validate_url(wp_registration_url()))
+            'provider' => array('url' => get_site_url(), 'name' => get_bloginfo('name'))
 		);
         
         $api_shortcode_url = 'https://api.logora.fr/synthese.js';
@@ -168,7 +166,7 @@ class Logora_Synthesis_Shortcode {
 		if ( is_feed() ) {
 			return false;
         }
-        
+
         $illegal_post_statuses = array(
 			'draft',
 			'auto-draft',
@@ -176,19 +174,19 @@ class Logora_Synthesis_Shortcode {
 			'future',
 			'trash',
 		);
-        
+
         $postStatus = $post->post_status;
-        
-         if( in_array( $postStatus, $illegal_post_statuses ) ) {
+
+        if( in_array( $postStatus, $illegal_post_statuses ) ) {
             return false;
         }
-        
+
         $shortname = get_option('logora_shortname', '');
-        
+
         if( ! $shortname ) {
             return false;
         }
-		
+
 		$allowDebateExists = metadata_exists('post', $post->ID, 'logora_allow_debate');
 		$allowDebate = get_post_meta($post->ID, "logora_allow_debate", true);
 		

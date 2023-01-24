@@ -100,27 +100,33 @@ class Logora_App_Shortcode {
      */
 	public function shortcode( $atts ) {    
 		$object_name = 'logora_config';
-		
+
 		if(!get_option('logora_shortname')) {
 			$shortcode_init = "<div>" . __( 'To finalize your installation, add your app name and credentials on the ', 'logora' ) . "<a href=" .
 				admin_url( 'admin.php?page=logora' ) .
 				">" . __( 'Logora settings page', 'logora' ) . "</a></div>";
 			return $shortcode_init;
 		}
-        
+
 		$embed_vars = array(
             'shortname' => get_option('logora_shortname'),
-            'provider' => array('url' => get_site_url(), 'name' => get_bloginfo('name')),
-            'auth' => array('login_url' => wp_http_validate_url(wp_login_url()),
-                            'registration_url' => wp_http_validate_url(wp_registration_url())),
+            'provider' => array('url' => get_site_url(), 'name' => get_bloginfo('name'))
 		);
         
-        if(is_user_logged_in()) {
+        $sso_enabled = get_option('logora_enable_sso', true);
+        if($sso_enabled) {
+            $auth = array(
+                'type' => 'signature_jwt', 
+                'login_url' => wp_http_validate_url(wp_login_url()),
+                'registration_url' => wp_http_validate_url(wp_registration_url())
+            );
+            $embed_vars['auth'] = $auth;
+
             $logora_utils = new Logora_Utils();
             $remote_auth = $logora_utils->get_sso_auth();
             $embed_vars['remote_auth'] = $remote_auth;
         }
-		
+
 		$api_app_url = 'https://api.logora.fr/debat.js';
 		$shortcode = "<div id='logora_app' data-object-id=\"".$object_name."\"></div>
                       ". self::logora_config_script($object_name, $embed_vars) ."
@@ -131,7 +137,7 @@ class Logora_App_Shortcode {
                             (d.head || d.body).appendChild(s);
                          })();
                       </script>";
-                      
+
         wp_enqueue_script( $this->logora . '_debate' );
 		return $shortcode;
 	}

@@ -55,15 +55,18 @@ class Logora_Admin {
 	 */
     public function settings_init() {        
         add_settings_section(
-         'logora_main_settings',
-         __('Main', 'logora'),
-         array($this, 'logora_section_main_cb'),
-         'logora'
+            'logora_main_settings',
+            __('Main', 'logora'),
+            array($this, 'logora_section_main_cb'),
+            'logora'
         );
         
         register_setting("logora", "logora_shortname");
-        register_setting("logora", "logora_secret_key");
         register_setting("logora", "logora_prefix_path");
+        register_setting("logora", "logora_enable_sso", [
+            'default' => "1",
+        ]);
+        register_setting("logora", "logora_secret_key");
         
         add_settings_field(
             'logora_shortname',
@@ -80,20 +83,6 @@ class Logora_Admin {
         );
         
         add_settings_field(
-            'logora_secret_key',
-            __("Secret key", 'logora'),
-            array($this, 'logora_input_field_cb'),
-            'logora',
-            'logora_main_settings',
-            array(
-                'label_for' => 'logora_secret_key',
-                'type' => 'password',
-                'option_name' => 'logora_secret_key',
-                'description' => __("Your secret key is available in your Logora administration panel", 'logora'),
-            )
-        );
-        
-        add_settings_field(
             'logora_prefix_path',
             __("Path to the debate space", 'logora'),
             array($this, 'logora_input_field_cb'),
@@ -106,17 +95,63 @@ class Logora_Admin {
                 'description' => __("Path to the debate space. Refresh permalinks after changing this setting", 'logora'),
             )
         );
+
+        add_settings_section(
+            'logora_auth_settings',
+            __('Authentication', 'logora'),
+            array($this, 'logora_section_auth_cb'),
+            'logora'
+        );
+
+        add_settings_field(
+            'logora_enable_sso',
+            __("Enable Single Sign-On (SSO)", 'logora'),
+            array($this, 'logora_input_field_cb'),
+            'logora',
+            'logora_auth_settings',
+            array(
+                'label_for' => 'logora_enable_sso',
+                'type' => 'checkbox',
+                'option_name' => 'logora_enable_sso',
+                'description' => __("Check this box to enable users to use their Wordpress account to sign in to the debate space", 'logora'),
+            )
+        );
+        
+        add_settings_field(
+            'logora_secret_key',
+            __("Secret key", 'logora'),
+            array($this, 'logora_input_field_cb'),
+            'logora',
+            'logora_auth_settings',
+            array(
+                'label_for' => 'logora_secret_key',
+                'type' => 'password',
+                'option_name' => 'logora_secret_key',
+                'description' => __("Your secret key is required if SSO is enabled. It is available in your Logora administration panel", 'logora'),
+            )
+        );
     }
     
     /**
-	 * Callback function to print content at the top of the settings section.
+	 * Callback function to print content at the top of the main settings section.
 	 *
 	 * @since     1.0.0
 	 * @access    public
 	 * @return    None
 	 */
     public function logora_section_main_cb( $args ) {
-        echo '<span>'. _e("To finalize the Logora installation, input your application name and secret key that can be found in", 'logora') .'<a href="https://admin.logora.fr" target="_blank">'. _e("your administration panel", 'logora') .'</a>.</span><br>';
+        echo '<span>'. _e("To finalize the Logora installation, input your application name that can be found in", 'logora') .'<a href="https://admin.logora.fr" target="_blank">'. _e("your administration panel", 'logora') .'</a>.</span><br>';
+    }
+
+     /**
+	 * Callback function to print content at the top of the auth settings section.
+	 *
+	 * @since     1.2.0
+	 * @access    public
+	 * @return    None
+	 */
+    public function logora_section_auth_cb( $args ) {
+        echo '<span>'. _e("Enable SSO so that your users can debate with their Wordpress account. Your secret key can be found in", 'logora') .'<a href="https://admin.logora.fr" target="_blank">'. _e("your administration panel", 'logora') .'</a>.</span><br>';
     }
     
     /**
@@ -137,7 +172,7 @@ class Logora_Admin {
 		}
         $name   =  $option_name;
         $desc   = $args["description"];
-		$checked = checked($type === 'checkbox' && !empty(get_option($option_name)), 1, false);
+		$checked = checked($type === 'checkbox' && get_option($option_name, true), 1, false);
         
         print "<input type='$type' value='$value' name='$name' id='$id'
             class='regular-text code' $checked /> <span class='description'>$desc</span>";

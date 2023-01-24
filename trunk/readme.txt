@@ -2,8 +2,8 @@
 Contributors: henryboisgibault
 Tags: debate, comments, conversation, threaded, email, notification, spam, avatars, community, profile, widget, logora
 Requires at least: 4.6
-Tested up to: 5.8.2
-Stable tag: 1.1.6
+Tested up to: 6.1.1
+Stable tag: 1.1.7
 Requires PHP: 5.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -38,7 +38,8 @@ You can customize Logora by going to your [Logora admin panel](https://admin.log
 
 = How do I set up Single Sign-On (SSO)? =
 
-SSO allows users in your database to comment without requiring them to register with Logora. Access to SSO is available automaticallys with this plugin.
+SSO allows users in your database to debate without requiring them to register with Logora. Access to SSO is available automatically with this plugin.
+If you want to disable SSO and use social sign-in, go to your administration panel > Configuration > Authentication and choose Social.
 
 = I’m experiencing an issue with my installation of Logora. =
 
@@ -87,3 +88,8 @@ Check out our [Documentation](https://docs.logora.fr) or contact us at support@l
 
 = 1.1.6 =
 * Insert Logora code in posts by default
+
+= 1.2.0 =
+* Updated Readme
+* Added option to enable and disable SSO
+* SSO is now handled with a JWT token

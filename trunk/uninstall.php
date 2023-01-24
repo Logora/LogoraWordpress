@@ -18,5 +18,6 @@ if ( ! current_user_can( 'install_plugins' ) ) {
 }
 
 delete_option( 'logora_shortname' );
-delete_option( 'logora_secret_key' );
 delete_option( 'logora_prefix_path' );
+delete_option( 'logora_enable_sso' );
+delete_option( 'logora_secret_key' );
