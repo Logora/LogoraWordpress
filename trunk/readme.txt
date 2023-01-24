@@ -93,3 +93,4 @@ Check out our [Documentation](https://docs.logora.fr) or contact us at support@l
 * Updated Readme
 * Added option to enable and disable SSO
 * SSO is now handled with a JWT token
+* Metabox bug fixes
