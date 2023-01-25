@@ -218,6 +218,7 @@ class Logora {
         $plugin_shortcode = new Logora_Synthesis_Shortcode( $this->get_logora_name(), $this->get_version() );
 
 		$this->loader->add_action('init', $plugin_shortcode, 'register_shortcode' );
+		$this->loader->add_filter('the_content', $plugin_shortcode, 'insert_shortcode');
     }
     
     /**

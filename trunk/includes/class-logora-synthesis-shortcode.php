@@ -59,7 +59,20 @@ class Logora_Synthesis_Shortcode {
         add_shortcode( 'logora-synthese', array($this, 'shortcode') );
     }
     
-    
+    /**
+     * Insert shortcode after post content. Insertion is controlled by the 'logora_insert_shortcode' parameter.
+     *
+     * @since    1.2.0
+     * @access   public
+     */
+    public function insert_shortcode($content) {
+        if( ! is_single() ) return $content;
+
+        if( ! get_option('logora_insert_shortcode', true) ) return $content;
+
+        return $content . do_shortcode('[logora-synthese]');
+    }
+
     /**
      * Create configuration script to be inserted with the Logora Shortcode.
      * 
@@ -82,7 +95,7 @@ class Logora_Synthesis_Shortcode {
      * @return   string    The code embedded by the Logora Shortcode.
      */
 	public function shortcode( $atts=[] ) {
-        global $post;
+        $post = get_post();
         
         if( ! $this->embed_can_load_for_post( $post )) {
             return false;
@@ -105,7 +118,6 @@ class Logora_Synthesis_Shortcode {
         $thumbnailUrl = $postThumbnailUrl ? $postThumbnailUrl : "";
 		$postPublishdedDate = get_the_time('c');
 		$postTitle = get_the_title($post);
-		$postDescription = get_the_excerpt($post);
         $postTagsArray = get_the_tags($post_id);
         $postTags = array();
         if($postTagsArray) {
@@ -114,7 +126,7 @@ class Logora_Synthesis_Shortcode {
             }
         }
         $postUrl = get_the_permalink($post_id);
-        
+
         $debateObject = array(
 			'identifier' => $identifier,
         );
@@ -126,7 +138,7 @@ class Logora_Synthesis_Shortcode {
 		$sourceObject = array(
 			'source_url' => $postUrl,
 			'title' => $postTitle,
-			'description' => $postDescription,
+            'description' => '',
 			'tag_objects' => $postTags,
 			'origin_image_url' => $thumbnailUrl,
 			'publisher' => get_bloginfo('name'),
@@ -139,7 +151,7 @@ class Logora_Synthesis_Shortcode {
 			'source' => $sourceObject,
             'provider' => array('url' => get_site_url(), 'name' => get_bloginfo('name'))
 		);
-        
+
         $api_shortcode_url = 'https://api.logora.fr/synthese.js';
 		$shortcode = "<div class='logora_synthese' data-object-id=\"".$object_name."\"></div>
                       ". self::logora_config_script($object_name, $object) ."

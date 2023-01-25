@@ -105,11 +105,11 @@ class Logora_Metabox {
         if(!isset($_POST['logora_metabox_nonce']) || !wp_verify_nonce($_POST['logora_metabox_nonce'], 'save_metabox_data')){
             return;
         }
-		
+
         if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
             return;
         }
-    
+
         if ( ! current_user_can( 'edit_post', $post_id ) ) {
             return;
         }
@@ -119,7 +119,7 @@ class Logora_Metabox {
         } else {
             update_post_meta($post_id, 'logora_allow_debate', false);
         }
-        
+
 		$debateTitle = "";
 		if( isset($_POST['logora_metabox_debate_title']) && !empty($_POST['logora_metabox_debate_title'])) {
             $debateTitle = sanitize_text_field($_POST['logora_metabox_debate_title']);

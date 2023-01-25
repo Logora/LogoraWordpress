@@ -60,14 +60,17 @@ class Logora_Admin {
             array($this, 'logora_section_main_cb'),
             'logora'
         );
-        
+
         register_setting("logora", "logora_shortname");
         register_setting("logora", "logora_prefix_path");
         register_setting("logora", "logora_enable_sso", [
             'default' => "1",
         ]);
+        register_setting("logora", "logora_insert_shortcode", [
+            'default' => "1",
+        ]);
         register_setting("logora", "logora_secret_key");
-        
+
         add_settings_field(
             'logora_shortname',
             __("Application name", 'logora'),
@@ -81,7 +84,7 @@ class Logora_Admin {
                 'description' => __("Your application name is available in your Logora administration panel", 'logora'),
             )
         );
-        
+
         add_settings_field(
             'logora_prefix_path',
             __("Path to the debate space", 'logora'),
@@ -93,6 +96,20 @@ class Logora_Admin {
                 'type' => 'text',
                 'option_name' => 'logora_prefix_path',
                 'description' => __("Path to the debate space. Refresh permalinks after changing this setting", 'logora'),
+            )
+        );
+
+        add_settings_field(
+            'logora_insert_shortcode',
+            __("Insert shortcode", 'logora'),
+            array($this, 'logora_input_field_cb'),
+            'logora',
+            'logora_main_settings',
+            array(
+                'label_for' => 'logora_insert_shortcode',
+                'type' => 'checkbox',
+                'option_name' => 'logora_insert_shortcode',
+                'description' => __("Insert synthesis shortcode by default in all posts", 'logora'),
             )
         );
 
