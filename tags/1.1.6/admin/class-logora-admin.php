@@ -211,3 +211,4 @@ class Logora_Admin {
 		return $links;
 	}
 }
+

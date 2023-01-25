@@ -1,9 +1,9 @@
 === Logora ===
 Contributors: henryboisgibault
-Tags: debate, comments, threaded, email, notification, spam, avatars, community, profile, widget, logora
+Tags: debate, comments, conversation, threaded, email, notification, spam, avatars, community, profile, widget, logora
 Requires at least: 4.6
-Tested up to: 5.5
-Stable tag: 1.1.4
+Tested up to: 6.1.1
+Stable tag: 1.2.0
 Requires PHP: 5.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -28,7 +28,7 @@ The Logora for WordPress plugin lets site owners and developers easily add Logor
 
 * Search our [Knowledge Base](https://docs.logora.fr) for solutions to common troubleshooting questions
 * Talk to our Support team at [logora.fr](logora.fr/support)
-* Visit our [Getting Started](https://docs.logora.fr/installation/1b-utiliser-notre-plugin-wordpress) page to learn the basics of Logora
+* Visit our [Getting Started](https://docs.logora.fr/installation/wordpress) page to learn the basics of Logora
 
 == Frequently Asked Questions ==
 
@@ -38,7 +38,8 @@ You can customize Logora by going to your [Logora admin panel](https://admin.log
 
 = How do I set up Single Sign-On (SSO)? =
 
-SSO allows users in your database to comment without requiring them to register with Logora. Access to SSO is available automaticallys with this plugin.
+SSO allows users in your database to debate without requiring them to register with Logora. Access to SSO is available automatically with this plugin.
+To enable SSO, don't forget your secret key in the Logora Wordpress settings.
 
 = I’m experiencing an issue with my installation of Logora. =
 
@@ -81,3 +82,16 @@ Check out our [Documentation](https://docs.logora.fr) or contact us at support@l
 
 = 1.1.4 =
 * Bug fixes and improvements
+
+= 1.1.5 =
+* Bug fixes and improvements
+
+= 1.1.6 =
+* Insert Logora code in posts by default
+
+= 1.2.0 =
+* Updated Readme
+* Added option to enable and disable SSO
+* SSO is now handled with a JWT token
+* Metabox bug fixes
+* Insert Logora synthesis shortcode by default in all posts with option to deactivate
