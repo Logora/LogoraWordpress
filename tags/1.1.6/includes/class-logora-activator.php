@@ -30,7 +30,27 @@ class Logora_Activator {
         add_option( 'logora_prefix_path', 'espace-debat');
 
         self::add_logora_debate_page();
+		self::add_rewrite_rules();
         flush_rewrite_rules();
+    }
+	
+	/**
+     * Adds rewriting rules for the Logora App Shortcode
+     *
+     * @since   1.0.0
+     * @access  public
+     * @return  None
+     */
+    private static function add_rewrite_rules()
+    {
+        $prefix_path = get_option('logora_prefix_path');
+        if(!empty($prefix_path)) {
+            add_rewrite_rule(
+                '^'. $prefix_path .'[\S]*$',
+                'index.php?pagename=' . $prefix_path,
+                'top'
+            );
+        }
     }
     
     /**

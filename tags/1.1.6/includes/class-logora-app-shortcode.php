@@ -50,23 +50,13 @@ class Logora_App_Shortcode {
     }
     
     /**
-     * Register shortcode.
+     * Register app shortcode.
      *
      * @since    1.0.0
      * @access   public
      */
     public function register_shortcode() {
         add_shortcode( 'logora-app', array($this, 'shortcode') );
-    }
-    
-    /**
-     * Register scripts related to the shortcode.
-     *
-     * @since    1.0.0
-     * @access   public
-     */
-    public function register_scripts() {
-        wp_register_script( $this->logora . '_debate', 'https://api.logora.fr/debat.js', array(), null, true );
     }
     
     /**
@@ -81,8 +71,8 @@ class Logora_App_Shortcode {
                 var '. $object_name .' = '. json_encode($object) .';
             </script>';
     }
-    
-    /**
+	
+	/**
      * Adds rewriting rules for the Logora App Shortcode
      *
      * @since   1.0.0
@@ -120,7 +110,6 @@ class Logora_App_Shortcode {
         
 		$embed_vars = array(
             'shortname' => get_option('logora_shortname'),
-            'debate' => $debateObject,
             'provider' => array('url' => get_site_url(), 'name' => get_bloginfo('name')),
             'auth' => array('login_url' => wp_http_validate_url(wp_login_url()),
                             'registration_url' => wp_http_validate_url(wp_registration_url())),
